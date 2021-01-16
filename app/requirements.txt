@@ -1,0 +1,10 @@
+Flask==1.1.2
+flask-sqlalchemy
+flask_limiter
+pyOpenSSL
+WTForms
+email_validator
+pycryptodome
+Flask-WTF
+argon2_cffi
+argon2

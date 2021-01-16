@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+{% from "includes/formhelpers.html" import render_field %}
+
+<h4>
+    <strong>
+        Register
+    </strong>
+</h4>
+<hr>
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+<form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    {{ render_field(form.username, class="form-control") }}
+    {{ render_field(form.email, class="form-control") }}
+    {{ render_field(form.password, class="form-control") }}
+    {{ render_field(form.confirm, class="form-control") }}
+    {{ render_field(form.master_password, class="form-control") }}
+    {{ render_field(form.confirm_master, class="form-control") }}
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+<hr>
+
+<a href="/login">Login into existing account!</a>
+
+{% endblock body %}

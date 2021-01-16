@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+
+{% from "includes/formhelpers.html" import render_field %}
+
+
+
+<div class="topnav">
+    {% if session.logged_in %}
+		<a href="/logout/">Logout</a>
+	{% else %}
+		<a href="/login/">Login</a>
+		<a href="/register/">Sign up</a>
+	{% endif %}
+</div>
+<hr>
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% if session['logged_in'] %}
+	<h5>Welcome, {{session['username'] }}</h5>
+	
+
+	<table class="table">
+		<thead>
+		  <tr>
+			<th scope="col">url</th>
+			<th scope="col">password</th>
+		  </tr>
+		</thead>
+		<tbody>
+			{% for pw in user_one.pwmanagers %}
+		  <tr>
+			<th>{{pw.url}}</th>
+			{% if session['master'] %}
+			<td>{{pw.password}}</td>
+			{% endif %}
+
+			{% if session['master']==False %}
+			<td>{{pw.password}}</td>
+			{% endif %}
+
+		  </tr>
+		  	{% endfor %}
+		</tbody>
+	  </table>
+	{% if session['master'] %}
+	<form method="POST">
+		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+	
+		{{ render_field(form_add.url, class="form-control") }}
+		{{ render_field(form_add.password, class="form-control") }}
+	
+		<button type="submit" class="btn btn-primary">Add</button>
+	</form>
+	{% endif %}
+
+	{% if session['master'] == False %}
+
+	<form method="POST">
+		<input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+	
+		{{ render_field(form_master.master_password, class="form-control") }}
+
+		<button type="submit" class="btn btn-primary">Enter as master</button>
+	</form>
+	{% endif %}
+
+	
+	<hr>
+{% endif %}
+
+{% endblock body %}
